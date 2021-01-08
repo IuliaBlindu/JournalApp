@@ -102,6 +102,7 @@ export default {
       errors: ""
     };
   },
+
   methods: {
     changeAction() {
       console.log("Buna");
@@ -127,8 +128,11 @@ export default {
             this.errors = "Au aparut erori";
           } else {
             this.formData.id = res.id;
-            delete this.formData.password;
             this.$router.push("/home");
+            console.log("id:" + res.id);
+            this.$store.commit("setUser", res.id);
+            console.log("Buna aici e store" + this.$store.state.userId);
+            delete this.formData.password;
           }
         })
         .catch(err => console.log(err));
