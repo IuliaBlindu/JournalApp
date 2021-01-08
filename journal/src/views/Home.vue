@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/Menu/Sidebar";
 export default {
   name: "Home",
   components: { Sidebar }
