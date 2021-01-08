@@ -11,9 +11,99 @@ admin.initializeApp({
 
 let db = admin.firestore(); // imi stochez o referinta catre baza mea de date
 
-/* GET users listing. */
-router.get("/", function(req, res, next) {
-  res.send("respond with a resource");
+const bcrypt = require("bcrypt");
+const saltRounds = 13;
+
+const jwt = require("jsonwebtoken");
+let secret = "hiddenSecret";
+
+// MIDDLEWARE
+function verifyToken(req, res, next) {
+  const bearerHeader = req.headers["authorization"];
+
+  if (typeof bearerHeader !== "undefined") {
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+    jwt.verify(req.token, secret, (err, decode) => {
+      if (err) {
+        res.sendStatus(401);
+      } else {
+        next(); // daca am trecut de verificarea lui, pot sa merg mai departe
+      }
+    });
+  } else {
+    res.sendStatus(401);
+  }
+}
+
+/* login. */
+router.post("/login", async (req, res) => {
+  let response = { loginSuccessful: false };
+  console.log("Login attempt");
+  const users = await db.collection("users");
+  const userSnapshot = await users.get();
+  if (userSnapshot.length === 0) {
+    console.log("The database is empty");
+    res.send(response);
+  } else {
+    let userData = req.body;
+    let foundUser = null;
+    userSnapshot.forEach(doc => {
+      let user = { ...doc.data() };
+      if (user.email === userData.email) {
+        console.log("User found");
+        foundUser = user;
+      }
+    });
+    if (!foundUser) {
+      console.log("No such user");
+      res.send(response);
+    } else {
+      bcrypt
+        .compare(userData.password, foundUser.password)
+        .then(comparationResult => {
+          if (comparationResult) {
+            console.log("Authentication successful");
+            response.token = jwt.sign(foundUser.email, secret);
+            response.loginSuccessful = true;
+            response.id = foundUser.id;
+            res.send(response);
+          } else {
+            console.log("Password mismatch");
+            res.send(response);
+          }
+        });
+    }
+  }
+});
+
+/* register. */
+router.post("/register", async (req, res) => {
+  let response = { registerSuccessful: false };
+  let userData = req.body; // ar trebui sa contina obiectul pe care l-am trimis
+  let duplicate = false;
+  const users = await db.collection("users");
+  const userSnapshot = await users.get();
+  userSnapshot.forEach(doc => {
+    let user = { ...doc.data() };
+    if (user.email == userData.email) {
+      console.log("User already exists");
+      duplicate = true;
+    }
+  });
+
+  if (!duplicate) {
+    bcrypt.hash(userData.password, saltRounds).then(async hash => {
+      userData.password = hash;
+      const doc = await db.collection("users").add(userData);
+      response.registerSuccessful = true;
+      response.id = doc.id;
+      res.send(response);
+    });
+  } else {
+    res.send(response);
+  }
 });
 
 router.post("/category", async (req, res) => {

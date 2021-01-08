@@ -1,19 +1,13 @@
 <template>
-  <div class="container">
-    <div class="mainBlock">
-      <Login />
-    </div>
+  <div class="home">
+    <Sidebar />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Login from "@/components/Login.vue";
-
+import Sidebar from "../components/Sidebar";
 export default {
   name: "Home",
-  components: {
-    Login
-  }
+  components: { Sidebar }
 };
 </script>
