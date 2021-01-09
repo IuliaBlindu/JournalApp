@@ -254,3 +254,8 @@ button:focus {
 .drop2 {
   overflow: hidden;
 }
+
+.listOfEntries{
+  width: 80vw;
+  margin:auto;
+}

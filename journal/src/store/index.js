@@ -6,7 +6,9 @@ const store = new Vuex.Store({
     userId: null,
     isNavOpen: false,
     categoryAction: null,
-    entryAction: "Add"
+    entryAction: "Add",
+    entryToEdit: null,
+    filter: "All"
   },
 
   mutations: {
@@ -24,7 +26,13 @@ const store = new Vuex.Store({
     },
     setEntry: (state, name) => {
       state.entryAction = name;
-    }
+    },
+    setEntryToEdit: (state, id) => {
+      state.entryToEdit = id;
+    },
+    setFilter: (state, filter) => {
+      state.filter = filter;
+    },
   }
 });
 

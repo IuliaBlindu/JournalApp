@@ -6,31 +6,26 @@
         <Burger></Burger>
       </nav>
       <span class="userTitle">{{ this.$store.state.userName }}</span>
-      <span class="journalTitle">{{title }}</span>
+      <span class="journalTitle">{{ title }}</span>
+    </div>
+    <div class="entryDiv">
+      <ListOfEntries />
     </div>
     <Sidebar>
       <span class="userTitleS">{{ this.$store.state.userName }}</span>
-      <span class="journalTitleS">{{title }}</span>
+      <span class="journalTitleS">{{ title }}</span>
       <ul class="sidebar-panel-nav">
         <li>
-          <router-link to="/home">
-            <Journal />My Journal
-          </router-link>
+          <router-link to="/home"> <Journal />My Journal </router-link>
         </li>
         <li>
-          <router-link to="/entry">
-            <NewEntry />New Entry
-          </router-link>
+          <router-link to="/entry"> <NewEntry />New Entry </router-link>
         </li>
         <li>
-          <router-link to="/profile">
-            <Profile />Profile
-          </router-link>
+          <router-link to="/profile"> <Profile />Profile </router-link>
         </li>
         <li>
-          <router-link to="/">
-            <Logout />Logout
-          </router-link>
+          <router-link to="/"> <Logout />Logout </router-link>
         </li>
       </ul>
     </Sidebar>
@@ -40,7 +35,7 @@
 <script>
 import Burger from "../components/Menu/Burger.vue";
 import Sidebar from "../components/Menu/Sidebar.vue";
-
+import ListOfEntries from "../components/ListOfEntries.vue";
 import Journal from "../assets/icons/Journal";
 import NewEntry from "../assets/icons/NewEntry";
 import Profile from "../assets/icons/Profile";
@@ -53,7 +48,8 @@ export default {
     Journal,
     NewEntry,
     Profile,
-    Logout
+    Logout,
+    ListOfEntries,
   },
   data() {
     return { title: "'s journal" };
@@ -65,7 +61,7 @@ export default {
     },
     isBurgerActive() {
       return this.$store.state.isNavOpen;
-    }
-  }
+    },
+  },
 };
 </script>

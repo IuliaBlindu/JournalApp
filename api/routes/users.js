@@ -39,7 +39,7 @@ function verifyToken(req, res, next) {
 
 /* login. */
 router.post("/login", async (req, res) => {
-  let response = { loginSuccessful: false };
+  let response = { loginSuccessfull: "false" };
   console.log("Login attempt");
   const users = await db.collection("users");
   const userSnapshot = await users.get();
@@ -66,9 +66,8 @@ router.post("/login", async (req, res) => {
         .compare(userData.password, foundUser.password)
         .then(comparationResult => {
           if (comparationResult) {
-            console.log("Authentication successful");
             response.token = jwt.sign(foundUser.email, secret);
-            response.loginSuccessful = true;
+            response.loginSuccessfull = "true";
             response.id = foundId;
             response.name = foundUser.name;
             console.log(response);
@@ -84,7 +83,7 @@ router.post("/login", async (req, res) => {
 
 /* register. */
 router.post("/register", async (req, res) => {
-  let response = { registerSuccessful: false };
+  let response = { registerSuccessful: "false" };
   let userData = req.body; // ar trebui sa contina obiectul pe care l-am trimis
   let duplicate = false;
   const users = await db.collection("users");
@@ -101,7 +100,7 @@ router.post("/register", async (req, res) => {
     bcrypt.hash(userData.password, saltRounds).then(async hash => {
       userData.password = hash;
       const doc = await db.collection("users").add(userData);
-      response.registerSuccessful = true;
+      response.registerSuccessful = "true";
       response.id = doc.id;
       res.send(response);
     });
@@ -132,7 +131,6 @@ router.get("/category/:id", async (req, res) => {
   } else {
     response = { status: "success", data: todo.data() };
   }
-  console.log(response);
   res.send(response);
 });
 
@@ -185,6 +183,7 @@ router.post("/entry", async (req, res) => {
 });
 
 router.get("/entry/:id", async (req, res) => {
+  console.log("id");
   const entries = db.collection("entries");
   let id = req.params.id;
   let response = { status: "failed" };
@@ -194,6 +193,7 @@ router.get("/entry/:id", async (req, res) => {
     console.log("No such document!");
   } else {
     response = { status: "success", data: entry.data() };
+    console.log(response.data)
   }
   console.log(response);
   res.send(response);

@@ -10,7 +10,7 @@
           "
         >
           <br />
-          <div class="form-group ">
+          <div class="form-group">
             <label for="categoryName" class="labels">Name</label>
             <input
               id="categoryName"
@@ -22,7 +22,7 @@
             />
           </div>
 
-          <div class="form-group ">
+          <div class="form-group">
             <label for="categoryDescription" class="labels">Decription</label>
             <textarea
               class="form-control"
@@ -32,7 +32,7 @@
               v-model="formData.description"
             ></textarea>
           </div>
-          <div class="form-group ">
+          <div class="form-group">
             <label for="overallFeeling" class="labels">Overall Feeling</label>
             <input
               id="overallFeeling"
@@ -59,26 +59,25 @@ export default {
   data() {
     return {
       value: null,
-
-      tasksArray: [],
       formData: {
         id: "id",
         name: null,
         description: null,
-        feeling: null
+        feeling: null,
+        userId: null,
       },
       apiCallParameters: {
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer" // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
       },
       baseUrl: "http://localhost:3000/users",
-      errors: ""
+      errors: "",
     };
   },
 
@@ -88,10 +87,11 @@ export default {
       callParameters.method = "POST";
       let url = this.baseUrl + "/category";
       delete this.formData.id;
+      this.formData.userId = this.$store.state.userId;
       callParameters.body = JSON.stringify(this.formData);
       fetch(url, callParameters)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
@@ -99,9 +99,9 @@ export default {
             this.$router.push("/entry");
           }
         })
-        .catch(err => console.log(err));
-    }
-  }
+        .catch((err) => console.log(err));
+    },
+  },
 };
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>

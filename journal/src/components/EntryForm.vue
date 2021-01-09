@@ -10,7 +10,11 @@
         >
           <label for="drop" class="labels"
             >Category
-            <button class="btn btn-primary" v-on:click="addCategory()">
+            <button
+              v-if="this.$store.state.entryAction === 'Add'"
+              class="btn btn-primary"
+              v-on:click="addCategory()"
+            >
               +
             </button></label
           >
@@ -134,12 +138,11 @@ export default {
     return {
       options: [],
       categories: [],
-      tasksArray: [],
       formData: {
         id: "id",
         userId: null,
-        categoryId: null,
-        title: null,
+        categoryId: "null",
+        title: "null",
         date: null,
         description: null,
         feeling: null,
@@ -194,7 +197,11 @@ export default {
     },
     post() {
       delete this.formData.id;
+      this.formData.categoryName = this.categories[
+        this.formData.categoryId
+      ].name;
       this.formData.categoryId = this.categories[this.formData.categoryId].id;
+
       this.formData.userId = this.$store.state.userId;
 
       let callParameters = { ...this.apiCallParameters }; // shallow clone
@@ -208,9 +215,48 @@ export default {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            this.formData.id = res.id;
             this.$router.push("/home");
-            delete this.formData.password;
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+    put() {
+      let callParameters = { ...this.apiCallParameters }; // shallow clone
+      callParameters.method = "PUT";
+      let url = this.baseUrl + "/entry";
+
+      callParameters.body = JSON.stringify(this.formData);
+      fetch(url, callParameters)
+        .then((res) => res.json())
+        .then((res) => {
+          if (!res.status === "success") {
+            this.errors = "Au aparut erori";
+          } else {
+            this.$router.push("/home");
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+    fillForm() {
+      let self = this;
+      let callParameters = { ...this.apiCallParameters }; // shallow clone
+      callParameters.method = "GET";
+      let url = this.baseUrl + "/entry/" + this.$store.state.entryToEdit;
+      console.log(this.$store.state.entryToEdit);
+      fetch(url, callParameters)
+        .then((res) => res.json())
+        .then((res) => {
+          if (!res.status === "success") {
+            this.errors = "Au aparut erori";
+          } else {
+            console.log(res.data);
+            self.formData.id = self.$store.state.entryToEdit;
+            self.formData.userId = res.data.userId;
+            self.formData.categoryId = res.data.categoryId;
+            self.formData.title = res.data.title;
+            self.formData.date = res.data.date;
+            self.formData.description = res.data.description;
+            self.formData.feeling = res.data.feeling;
           }
         })
         .catch((err) => console.log(err));
@@ -218,6 +264,10 @@ export default {
   },
   beforeMount() {
     this.getCategory();
+    if (this.$store.state.entryAction === "edit") {
+      console.log("este");
+      this.fillForm();
+    }
   },
 };
 </script>

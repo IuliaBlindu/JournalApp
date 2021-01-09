@@ -122,10 +122,11 @@ export default {
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
-          if (!res.status === "success") {
+          if (res.loginSuccessfull === "false") {
             this.errors = "Au aparut erori";
           } else {
             this.$router.push("/home");
+            console.log(res.loginSuccessfull);
             this.$store.commit("setUserName", res.name);
             this.$store.commit("setUserId", res.id);
           }
@@ -143,7 +144,7 @@ export default {
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
-          if (!res.status === "success") {
+          if (res.registerSuccessful === "false") {
             this.errors = "Au aparut erori";
           } else {
             this.formData.id = res.id;
