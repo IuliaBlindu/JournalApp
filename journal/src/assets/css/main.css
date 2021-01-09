@@ -30,6 +30,13 @@ body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.labels {
+  color: rgb(135, 162, 168);
+  font-weight: lighter;
+  font-size: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 .title-sidebar {
   color: rgb(214, 234, 238);
   font-weight: lighter;
@@ -212,4 +219,38 @@ button:focus {
 }
 #burger.active .burger-bar--3 {
   transform: rotate(-45deg);
+}
+
+.entryDiv {
+  padding-top: 10vh;
+  height: 100vh;
+  width: 100vw;
+}
+
+#entryCard {
+  margin: auto;
+  width: 70vw;
+}
+#entryCardBody {
+  width: 70vw;
+  display: inline-block;
+  text-align: left;
+}
+
+#categoryCard {
+  margin: auto;
+  width: 60vw;
+}
+#categoryCardBody {
+  width: 60vw;
+  display: inline-block;
+  text-align: left;
+}
+
+.drop1 {
+  float: left; /* add this */
+  width: 80%;
+}
+.drop2 {
+  overflow: hidden;
 }

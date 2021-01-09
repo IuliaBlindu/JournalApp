@@ -9,7 +9,9 @@
       <span class="userTitle">{{ this.$store.state.userName }}</span>
       <span class="journalTitle">{{pageTitle }}</span>
     </div>
-
+    <div class="entryDiv">
+      <EntryForm />
+    </div>
     <Sidebar>
       <span class="userTitleS">{{ this.$store.state.userName }}</span>
       <span class="journalTitleS">{{title }}</span>
@@ -41,6 +43,7 @@
 
 <script>
 import Burger from "../components/Menu/Burger.vue";
+import EntryForm from "../components/EntryForm.vue";
 import Sidebar from "../components/Menu/Sidebar.vue";
 import Journal from "../assets/icons/Journal";
 import NewEntry from "../assets/icons/NewEntry";
@@ -54,7 +57,8 @@ export default {
     Journal,
     NewEntry,
     Profile,
-    Logout
+    Logout,
+    EntryForm
   },
   data() {
     return { title: "'s journal", pageTitle: "'s new entry" };

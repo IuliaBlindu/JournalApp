@@ -1,19 +1,29 @@
 import Vuex from "vuex";
 
 const store = new Vuex.Store({
-  state: { userName: null, isNavOpen: false },
-  getters: {
-    getUser: state => {
-      return state.userName;
-    }
+  state: {
+    userName: null,
+    userId: null,
+    isNavOpen: false,
+    categoryAction: null,
+    entryAction: "Add"
   },
+
   mutations: {
     toggleNav: state => {
       state.isNavOpen = !state.isNavOpen;
     },
-    setUser: (state, name) => {
-      console.log("Im here");
+    setUserName: (state, name) => {
       state.userName = name;
+    },
+    setUserId: (state, id) => {
+      state.userId = id;
+    },
+    setCategory: (state, name) => {
+      state.categoryAction = name;
+    },
+    setEntry: (state, name) => {
+      state.entryAction = name;
     }
   }
 });

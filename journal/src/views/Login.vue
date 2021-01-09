@@ -5,7 +5,10 @@
       <h1 class="title">Journal App</h1>
       <div class="card" id="authenticate" style="width: 18rem">
         <div class="card-body">
-          <form form @submit.prevent="formAction === 'Login' ? login() : register()">
+          <form
+            form
+            @submit.prevent="formAction === 'Login' ? login() : register()"
+          >
             <div class="input-group mb-3" v-if="formAction === 'Register'">
               <span class="input-group-text" id="basic-addon1">
                 <Person />
@@ -46,7 +49,9 @@
                 v-model="formData.password"
               />
             </div>
-            <button type="submit" class="btn btn-primary">{{ formAction }}</button>
+            <button type="submit" class="btn btn-primary">
+              {{ formAction }}
+            </button>
           </form>
           <br />
           <a href="#" v-on:click="changeAction()">{{ switchText }}</a>
@@ -60,13 +65,12 @@
 import Email from "../assets/icons/Email";
 import Password from "../assets/icons/Password";
 import Person from "../assets/icons/Person";
-
 export default {
   name: "Login",
   components: {
     Email,
     Password,
-    Person
+    Person,
   },
   data() {
     return {
@@ -75,7 +79,7 @@ export default {
         id: "id",
         name: null,
         email: null,
-        password: null
+        password: null,
       },
       loginTitle: "Login",
       registerTitle: "Register",
@@ -88,16 +92,15 @@ export default {
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer" // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
       },
       baseUrl: "http://localhost:3000/users",
-      errors: ""
+      errors: "",
     };
   },
-
   methods: {
     changeAction() {
       console.log("Buna");
@@ -117,18 +120,18 @@ export default {
       delete this.formData.name;
       callParameters.body = JSON.stringify(this.formData);
       fetch(url, callParameters)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
             this.formData.id = res.id;
             this.$router.push("/home");
-            this.$store.commit("setUser", res.name);
+            this.$store.commit("setUserName", res.name);
             delete this.formData.password;
           }
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     },
     register() {
       console.log(this.formData);
@@ -139,8 +142,8 @@ export default {
       callParameters.body = JSON.stringify(this.formData);
       console.log(callParameters.body);
       fetch(url, callParameters)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
@@ -150,8 +153,8 @@ export default {
             this.switchText = this.loginText;
           }
         })
-        .catch(err => console.log(err));
-    }
-  }
+        .catch((err) => console.log(err));
+    },
+  },
 };
 </script>

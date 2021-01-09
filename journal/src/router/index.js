@@ -3,6 +3,7 @@ import Login from "../views/Login.vue";
 import Home from "../views/Home.vue";
 import MyProfile from "../views/MyProfile.vue";
 import JournalEntry from "../views/JournalEntry.vue";
+import NewCategory from "../views/NewCategory.vue";
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: "/entry",
     name: "JournalEntry",
     component: JournalEntry
+  },
+  {
+    path: "/category",
+    name: "NewCategory",
+    component: NewCategory
   }
 ];
 
