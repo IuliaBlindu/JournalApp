@@ -34,13 +34,46 @@ body {
   color: rgb(214, 234, 238);
   font-weight: lighter;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-top: 5vh;
 }
 
+.userTitle {
+  color: rgb(92, 123, 130);
+  font-weight: bold;
+  font-size: 2rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.journalTitle {
+  color: rgb(117, 151, 158);
+  font-weight: normal;
+  font-size: 1.7rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.userTitleS {
+  color: rgb(231, 221, 211);
+  font-weight: bold;
+  font-size: 2rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.journalTitleS {
+  color: rgb(201, 191, 182);
+  font-weight: normal;
+  font-size: 1.7rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.hero {
+  background: url("../hero.png") no-repeat;
+  background-size: cover;
+  height: 20vh;
+}
 .btn {
   background-color: rgb(92, 123, 130);
   border-color: rgb(92, 123, 130);
 }
-
 .btn:hover,
 .btn:focus,
 .btn:active,
@@ -50,52 +83,47 @@ body {
   background-color: rgb(190, 181, 172);
   border-color: rgb(190, 181, 172); /*set the color you want here*/
 }
-
 a {
   color: rgb(92, 123, 130);
 }
-
 a:hover,
 a:focus {
   color: rgb(190, 181, 172); /*set the color you want here*/
 }
-
 .logo {
   align-self: center;
   color: rgb(92, 123, 130);
   font-weight: bold;
   font-family: "Lato";
 }
-
 .main-nav {
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0.8rem;
 }
-
 ul.sidebar-panel-nav {
   list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 30vh !important;
+  text-align: left;
 }
-
 ul.sidebar-panel-nav > li > a {
-  color: #fff;
+  color: rgb(201, 191, 182);
   text-decoration: none;
-  font-size: 1.5rem;
-  display: block;
+  font-size: 1.4rem;
   padding-bottom: 0.5em;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.2s ease;
 }
-
 .slide-enter,
 .slide-leave-to {
   transform: translateX(-100%);
   transition: all 150ms ease-in 0s;
 }
-
 .sidebar-backdrop {
   background-color: rgba(0, 0, 0, 0.5);
   width: 100vw;
@@ -105,32 +133,29 @@ ul.sidebar-panel-nav > li > a {
   left: 0;
   cursor: pointer;
 }
-
 .sidebar-panel {
   overflow-y: auto;
   background-color: rgb(92, 123, 130);
+  opacity: 90%;
   position: fixed;
   left: 0;
   top: 0;
   height: 100vh;
   z-index: 999;
-  padding: 3rem 20px 2rem 20px;
-  width: 300px;
+  padding: 3rem 30px 2rem 30px;
+  display: inline-block;
+  text-align: left;
 }
-
 .hidden {
   visibility: hidden;
 }
-
 button {
   cursor: pointer;
 }
-
 /* remove blue outline */
 button:focus {
   outline: 0;
 }
-
 .burger-button {
   position: relative;
   height: 30px;
@@ -143,7 +168,6 @@ button:focus {
   pointer-events: all;
   transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-
 .burger-bar {
   background-color: #130f40;
   position: absolute;
@@ -157,45 +181,35 @@ button:focus {
     opacity 0.3s cubic-bezier(0.165, 0.84, 0.44, 1),
     background-color 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-
 .burger-bar--1 {
   -webkit-transform: translateY(-6px);
   transform: translateY(-6px);
 }
-
 .burger-bar--2 {
   transform-origin: 100% 50%;
   transform: scaleX(0.8);
 }
-
 .burger-button:hover .burger-bar--2 {
   transform: scaleX(1);
 }
-
 .no-touchevents .burger-bar--2:hover {
   transform: scaleX(1);
 }
-
 .burger-bar--3 {
   transform: translateY(6px);
 }
-
 #burger.active .burger-button {
   transform: rotate(-180deg);
 }
-
 #burger.active .burger-bar {
   background-color: #fff;
 }
-
 #burger.active .burger-bar--1 {
   transform: rotate(45deg);
 }
-
 #burger.active .burger-bar--2 {
   opacity: 0;
 }
-
 #burger.active .burger-bar--3 {
   transform: rotate(-45deg);
 }

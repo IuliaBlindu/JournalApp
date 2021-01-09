@@ -49,11 +49,13 @@ router.post("/login", async (req, res) => {
   } else {
     let userData = req.body;
     let foundUser = null;
+    let foundId = null;
     userSnapshot.forEach(doc => {
       let user = { ...doc.data() };
       if (user.email === userData.email) {
         console.log("User found");
         foundUser = user;
+        foundId = doc.id;
       }
     });
     if (!foundUser) {
@@ -67,7 +69,9 @@ router.post("/login", async (req, res) => {
             console.log("Authentication successful");
             response.token = jwt.sign(foundUser.email, secret);
             response.loginSuccessful = true;
-            response.id = foundUser.id;
+            response.id = foundId;
+            response.name = foundUser.name;
+            console.log(response);
             res.send(response);
           } else {
             console.log("Password mismatch");

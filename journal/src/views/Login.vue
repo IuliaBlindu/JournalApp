@@ -4,11 +4,8 @@
     <div class="col-sm-4" id="formDiv">
       <h1 class="title">Journal App</h1>
       <div class="card" id="authenticate" style="width: 18rem">
-        <div class="card-body ">
-          <form
-            form
-            @submit.prevent="formAction === 'Login' ? login() : register()"
-          >
+        <div class="card-body">
+          <form form @submit.prevent="formAction === 'Login' ? login() : register()">
             <div class="input-group mb-3" v-if="formAction === 'Register'">
               <span class="input-group-text" id="basic-addon1">
                 <Person />
@@ -49,9 +46,7 @@
                 v-model="formData.password"
               />
             </div>
-            <button type="submit" class="btn btn-primary">
-              {{ formAction }}
-            </button>
+            <button type="submit" class="btn btn-primary">{{ formAction }}</button>
           </form>
           <br />
           <a href="#" v-on:click="changeAction()">{{ switchText }}</a>
@@ -129,9 +124,7 @@ export default {
           } else {
             this.formData.id = res.id;
             this.$router.push("/home");
-            console.log("id:" + res.id);
-            this.$store.commit("setUser", res.id);
-            console.log("Buna aici e store" + this.$store.state.userId);
+            this.$store.commit("setUser", res.name);
             delete this.formData.password;
           }
         })

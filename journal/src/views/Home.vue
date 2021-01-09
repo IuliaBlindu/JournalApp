@@ -1,21 +1,38 @@
 <template>
   <div class="home">
-    <nav class="main-nav">
-      <div>
-        <h3 class="title">{{ title }}</h3>
-      </div>
-      <Burger></Burger>
-    </nav>
+    <div class="hero">
+      <nav class="main-nav">
+        <div></div>
+        <Burger></Burger>
+      </nav>
 
+      <span class="userTitle">{{ this.$store.state.userName }}</span>
+      <span class="journalTitle">{{title }}</span>
+    </div>
     <Sidebar>
-      <h1 class="title-sidebar">{{ title }}</h1>
+      <span class="userTitleS">{{ this.$store.state.userName }}</span>
+      <span class="journalTitleS">{{title }}</span>
       <ul class="sidebar-panel-nav">
-        <li><a href="#about">My Journal</a></li>
-        <li><a href="#contact">New Entry</a></li>
         <li>
-          <a href="/profile">Profile</a>
+          <router-link to="/home">
+            <Journal />My Journal
+          </router-link>
         </li>
-        <li><a href="/">Logout</a></li>
+        <li>
+          <router-link to="/entry">
+            <NewEntry />New Entry
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/profile">
+            <Profile />Profile
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/">
+            <Logout />Logout
+          </router-link>
+        </li>
       </ul>
     </Sidebar>
   </div>
@@ -24,14 +41,22 @@
 <script>
 import Burger from "../components/Menu/Burger.vue";
 import Sidebar from "../components/Menu/Sidebar.vue";
+import Journal from "../assets/icons/Journal";
+import NewEntry from "../assets/icons/NewEntry";
+import Profile from "../assets/icons/Profile";
+import Logout from "../assets/icons/Logout";
 export default {
-  name: "app",
+  name: "Home",
   components: {
     Burger,
-    Sidebar
+    Sidebar,
+    Journal,
+    NewEntry,
+    Profile,
+    Logout
   },
   data() {
-    return { title: "Journal App" };
+    return { title: "'s journal" };
   },
   computed: {
     user() {
