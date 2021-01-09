@@ -8,7 +8,8 @@ const store = new Vuex.Store({
     categoryAction: null,
     entryAction: "Add",
     entryToEdit: null,
-    filter: "All"
+    filter: "All",
+    filterId: null
   },
 
   mutations: {
@@ -32,6 +33,9 @@ const store = new Vuex.Store({
     },
     setFilter: (state, filter) => {
       state.filter = filter;
+    },
+    setFilterId: (state, id) => {
+      state.filterId = id;
     },
   }
 });

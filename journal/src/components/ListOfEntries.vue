@@ -3,15 +3,33 @@
     <button
       type="button"
       class="btn btn-primary mr-2"
-      v-for="option in options"
+      v-for="(option, index) in options"
       :key="option"
-      v-on:click="getEntries(option)"
+      v-on:click="filterResults(index)"
     >
       {{ option }}
     </button>
     <br />
     <br />
-    <h1></h1>
+    <h3 v-if="this.$store.state.filter !== 'All'">
+      <button class="btn btn-primary" v-on:click="editEntry(element.id)">
+        <Edit />
+      </button>
+      {{ this.$store.state.filter }}
+      <button
+        class="btn btn-primary"
+        style="
+          background-color: rgb(166, 143, 130) !important;
+          border-color: rgb(166, 143, 130) !important;
+        "
+        v-on:click="deleteEntry(element.id)"
+      >
+        <Delete />
+      </button>
+    </h3>
+
+    <br />
+    <br />
     <div class="row row-cols-1 row-cols-md-2 g-4">
       <div class="col" v-for="element in entries" :key="element.id">
         <div class="card mb-3">
@@ -61,6 +79,8 @@
 </template>
 
 <script>
+import Edit from "../assets/icons/Edit";
+import Delete from "../assets/icons/Delete";
 import Happy from "../assets/icons/Happy";
 import Sad from "../assets/icons/Sad";
 import Angry from "../assets/icons/Angry";
@@ -68,11 +88,11 @@ import Neutral from "../assets/icons/Neutral";
 
 export default {
   name: "ListOfEntries",
-  components: { Angry, Happy, Sad, Neutral },
+  components: { Angry, Happy, Sad, Neutral, Edit, Delete },
   data() {
     return {
       value: null,
-      categories: [],
+      categories: [{ name: "All", id: "null" }],
       options: ["All"],
       entries: [],
       apiCallParameters: {
@@ -91,8 +111,10 @@ export default {
   },
 
   methods: {
-    filterResults() {
-      console.log("filter");
+    filterResults(filter) {
+      this.$store.commit("setFilter", this.categories[filter].name);
+      this.$store.commit("setFilterId", this.categories[filter].id);
+      this.getEntries();
     },
     getCategoryName(id) {
       this.categories.forEach(function (item) {
@@ -128,8 +150,7 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    getEntries(filter) {
-      this.$store.commit("setFilter", filter);
+    getEntries() {
       this.entries = [];
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "GET";
