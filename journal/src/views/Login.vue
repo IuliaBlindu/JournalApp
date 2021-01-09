@@ -125,10 +125,9 @@ export default {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            this.formData.id = res.id;
             this.$router.push("/home");
             this.$store.commit("setUserName", res.name);
-            delete this.formData.password;
+            this.$store.commit("setUserId", res.id);
           }
         })
         .catch((err) => console.log(err));
