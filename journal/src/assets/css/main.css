@@ -77,18 +77,32 @@ body {
   background-size: cover;
   height: 20vh;
 }
-.btn {
+.btn-primary {
   background-color: rgb(92, 123, 130);
   border-color: rgb(92, 123, 130);
 }
-.btn:hover,
-.btn:focus,
-.btn:active,
-.btn.active.active,
-.open > .dropdown-toggle.btn {
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active.active,
+.open > .dropdown-toggle.btn-primary {
   color: #fff;
   background-color: rgb(190, 181, 172);
   border-color: rgb(190, 181, 172); /*set the color you want here*/
+}
+
+.btn-secondary {
+  background-color: rgb(166,143,130);
+  border-color: rgb(166,143,130);
+}
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-secondary.active.active,
+.open > .dropdown-toggle.btn-secondary {
+  color: #fff;
+  background-color: rgb(139, 109, 91);
+  border-color: rgb(139, 109, 91); /*set the color you want here*/
 }
 a {
   color: rgb(92, 123, 130);

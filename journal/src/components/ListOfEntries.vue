@@ -16,14 +16,7 @@
         <Edit />
       </button>
       {{ this.$store.state.filter }}
-      <button
-        class="btn btn-primary"
-        style="
-          background-color: rgb(166, 143, 130) !important;
-          border-color: rgb(166, 143, 130) !important;
-        "
-        v-on:click="deleteEntry(element.id)"
-      >
+      <button class="btn btn-secondary" v-on:click="deleteEntry(element.id)">
         <Delete />
       </button>
     </h3>
@@ -61,11 +54,7 @@
             >
             <a href="#" class="card-link">
               <button
-                class="btn btn-primary"
-                style="
-                  background-color: rgb(166, 143, 130) !important;
-                  border-color: rgb(166, 143, 130) !important;
-                "
+                class="btn btn-secondary"
                 v-on:click="deleteEntry(element.id)"
               >
                 Delete
