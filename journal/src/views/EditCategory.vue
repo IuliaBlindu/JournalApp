@@ -53,7 +53,7 @@ export default {
     CategoryForm,
   },
   data() {
-    return { title: "'s new category" };
+    return { title: "'s edit" };
   },
   computed: {
     user() {
@@ -65,7 +65,7 @@ export default {
     },
   },
   beforeMount() {
-    this.$store.commit("setCategory", "add");
+    this.$store.commit("setCategory", "edit");
   },
 };
 </script>

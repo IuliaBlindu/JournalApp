@@ -6,7 +6,7 @@
         <form
           form
           @submit.prevent="
-            this.$store.state.categoryAction === 'Add' ? post() : put()
+            this.$store.state.categoryAction === 'add' ? post() : put()
           "
         >
           <br />
@@ -101,6 +101,54 @@ export default {
         })
         .catch((err) => console.log(err));
     },
+    put() {
+      let callParameters = { ...this.apiCallParameters }; // shallow clone
+      callParameters.method = "PUT";
+      let url = this.baseUrl + "/category";
+      this.formData.userId = this.$store.state.userId;
+      callParameters.body = JSON.stringify(this.formData);
+      fetch(url, callParameters)
+        .then((res) => res.json())
+        .then((res) => {
+          if (!res.status === "success") {
+            this.errors = "Au aparut erori";
+          } else {
+            this.formData.id = res.id;
+            this.$store.commit("setFilter", this.formData.name);
+            this.$store.commit("setFilterId", this.formData.id);
+            this.$store.commit("setDescription", this.formData.description);
+            this.$store.commit("setFeeling", this.formData.feeling);
+            this.$router.push("/home");
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+    fillForm() {
+      console.log("here");
+      let self = this;
+      let callParameters = { ...this.apiCallParameters }; // shallow clone
+      callParameters.method = "GET";
+      console.log(this.$store.state.filterId);
+      let url = this.baseUrl + "/category/" + this.$store.state.filterId;
+      fetch(url, callParameters)
+        .then((res) => res.json())
+        .then((res) => {
+          if (!res.status === "success") {
+            this.errors = "Au aparut erori";
+          } else {
+            self.formData.id = self.$store.state.filterId;
+            self.formData.name = res.data.name;
+            self.formData.description = res.data.description;
+            self.formData.feeling = res.data.feeling;
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+  },
+  beforeMount() {
+    if (this.$store.state.categoryAction === "edit") {
+      this.fillForm();
+    }
   },
 };
 </script>

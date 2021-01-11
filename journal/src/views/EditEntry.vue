@@ -1,15 +1,16 @@
 <template>
-  <div class="home">
+  <div class="entry">
     <div class="hero">
       <nav class="main-nav">
         <div></div>
         <Burger></Burger>
       </nav>
+
       <span class="userTitle">{{ this.$store.state.userName }}</span>
-      <span class="journalTitle">{{ title }}</span>
+      <span class="journalTitle">{{ pageTitle }}</span>
     </div>
     <div class="entryDiv">
-      <CategoryForm />
+      <EntryForm />
     </div>
     <Sidebar>
       <span class="userTitleS">{{ this.$store.state.userName }}</span>
@@ -34,15 +35,14 @@
 
 <script>
 import Burger from "../components/Menu/Burger.vue";
+import EntryForm from "../components/EntryForm.vue";
 import Sidebar from "../components/Menu/Sidebar.vue";
-import CategoryForm from "../components/CategoryForm.vue";
-
 import Journal from "../assets/icons/Journal";
 import NewEntry from "../assets/icons/NewEntry";
 import Profile from "../assets/icons/Profile";
 import Logout from "../assets/icons/Logout";
 export default {
-  name: "NewCategory",
+  name: "EditEntry",
   components: {
     Burger,
     Sidebar,
@@ -50,10 +50,10 @@ export default {
     NewEntry,
     Profile,
     Logout,
-    CategoryForm,
+    EntryForm,
   },
   data() {
-    return { title: "'s new category" };
+    return { title: "'s journal", pageTitle: "'s edit" };
   },
   computed: {
     user() {
@@ -65,7 +65,7 @@ export default {
     },
   },
   beforeMount() {
-    this.$store.commit("setCategory", "add");
+    this.$store.commit("setEntry", "edit");
   },
 };
 </script>

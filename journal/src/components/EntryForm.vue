@@ -5,13 +5,13 @@
         <form
           form
           @submit.prevent="
-            this.$store.state.entryAction === 'Add' ? post() : put()
+            this.$store.state.entryAction === 'add' ? post() : put()
           "
         >
           <label for="drop" class="labels"
             >Category
             <button
-              v-if="this.$store.state.entryAction === 'Add'"
+              v-if="this.$store.state.entryAction === 'add'"
               class="btn btn-primary"
               v-on:click="addCategory()"
             >
@@ -171,7 +171,7 @@ export default {
   methods: {
     addCategory() {
       this.$router.push("/category");
-      this.$store.commit("setCategory", "Add");
+      this.$store.commit("setCategory", "add");
     },
     getCategory() {
       let callParameters = { ...this.apiCallParameters }; // shallow clone
@@ -185,11 +185,12 @@ export default {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            console.log(res.data);
             let data = res.data;
             data.forEach(function (item) {
-              self.categories.push({ name: item.name, id: item.id });
-              self.options.push(item.name);
+              if (item.userId === self.$store.state.userId) {
+                self.categories.push({ name: item.name, id: item.id });
+                self.options.push(item.name);
+              }
             });
           }
         })
@@ -197,9 +198,6 @@ export default {
     },
     post() {
       delete this.formData.id;
-      this.formData.categoryName = this.categories[
-        this.formData.categoryId
-      ].name;
       this.formData.categoryId = this.categories[this.formData.categoryId].id;
 
       this.formData.userId = this.$store.state.userId;
@@ -242,14 +240,12 @@ export default {
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "GET";
       let url = this.baseUrl + "/entry/" + this.$store.state.entryToEdit;
-      console.log(this.$store.state.entryToEdit);
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            console.log(res.data);
             self.formData.id = self.$store.state.entryToEdit;
             self.formData.userId = res.data.userId;
             self.formData.categoryId = res.data.categoryId;
@@ -265,7 +261,6 @@ export default {
   beforeMount() {
     this.getCategory();
     if (this.$store.state.entryAction === "edit") {
-      console.log("este");
       this.fillForm();
     }
   },

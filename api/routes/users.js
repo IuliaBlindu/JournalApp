@@ -129,7 +129,7 @@ router.get("/category/:id", async (req, res) => {
   if (!category.exists) {
     console.log("No such document!");
   } else {
-    response = { status: "success", data: todo.data() };
+    response = { status: "success", data: category.data() };
   }
   res.send(response);
 });

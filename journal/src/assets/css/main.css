@@ -251,6 +251,7 @@ button:focus {
   text-align: left;
 }
 
+
 #categoryCard {
   margin: auto;
   width: 60vw;
@@ -272,4 +273,13 @@ button:focus {
 .listOfEntries{
   width: 80vw;
   margin:auto;
+}
+
+.description{
+  font-weight:bold;
+  font-size: 20px;
+}
+.feeling{
+  font-style:italic;
+  font-size: 12;
 }

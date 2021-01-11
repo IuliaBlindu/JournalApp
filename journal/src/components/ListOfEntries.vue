@@ -1,27 +1,31 @@
 <template>
   <div class="listOfEntries">
-    <button
-      type="button"
-      class="btn btn-primary mr-2"
-      v-for="(option, index) in options"
-      :key="option"
-      v-on:click="filterResults(index)"
-    >
-      {{ option }}
-    </button>
-    <br />
-    <br />
-    <h3 v-if="this.$store.state.filter !== 'All'">
-      <button class="btn btn-primary" v-on:click="editEntry(element.id)">
-        <Edit />
-      </button>
+    <h3 class="title" v-if="this.$store.state.filter !== 'all'">
       {{ this.$store.state.filter }}
-      <button class="btn btn-secondary" v-on:click="deleteEntry(element.id)">
-        <Delete />
-      </button>
     </h3>
+    <h3 class="title" v-if="this.$store.state.filter === 'all'">All entries</h3>
+    <button
+      class="btn btn-primary btn-sm mr-2 mb-2"
+      v-if="this.$store.state.filter !== 'all'"
+      v-on:click="editCategory()"
+    >
+      <Edit />
+    </button>
+    <button
+      class="btn btn-secondary btn-sm mb-2"
+      v-if="this.$store.state.filter !== 'all'"
+      v-on:click="deleteCategory()"
+    >
+      <Delete /></button
+    ><br v-if="this.$store.state.filter !== 'all'" />
+    <span class="description" v-if="this.$store.state.filter !== 'all'">
+      {{ this.$store.state.description }} </span
+    ><br v-if="this.$store.state.filter !== 'all'" />
+    <span class="feeling" v-if="this.$store.state.filter !== 'all'">
+      {{ this.$store.state.feeling }} </span
+    ><br v-if="this.$store.state.filter !== 'all'" /><br />
 
-    <br />
+    <Multiselect v-model="filter" :options="options" placeholder="Category" />
     <br />
     <div class="row row-cols-1 row-cols-md-2 g-4">
       <div class="col" v-for="element in entries" :key="element.id">
@@ -74,15 +78,17 @@ import Happy from "../assets/icons/Happy";
 import Sad from "../assets/icons/Sad";
 import Angry from "../assets/icons/Angry";
 import Neutral from "../assets/icons/Neutral";
+import Multiselect from "@vueform/multiselect";
 
 export default {
   name: "ListOfEntries",
-  components: { Angry, Happy, Sad, Neutral, Edit, Delete },
+  components: { Multiselect, Angry, Happy, Sad, Neutral, Edit, Delete },
   data() {
     return {
       value: null,
-      categories: [{ name: "All", id: "null" }],
-      options: ["All"],
+      filter: "null",
+      categories: [{ name: "all", id: null, feeling: null, description: null }],
+      options: ["all"],
       entries: [],
       apiCallParameters: {
         mode: "cors", // no-cors, *cors, same-origin
@@ -98,13 +104,22 @@ export default {
       errors: "",
     };
   },
+  watch: {
+    filter(newValue) {
+      //optional parameters
+      console.log(this.categories[newValue].id);
+      this.$store.commit("setFilter", this.categories[newValue].name);
+      this.$store.commit("setFilterId", this.categories[newValue].id);
+      this.$store.commit(
+        "setDescription",
+        this.categories[newValue].description
+      );
+      this.$store.commit("setFeeling", this.categories[newValue].feeling);
 
-  methods: {
-    filterResults(filter) {
-      this.$store.commit("setFilter", this.categories[filter].name);
-      this.$store.commit("setFilterId", this.categories[filter].id);
       this.getEntries();
     },
+  },
+  methods: {
     getCategoryName(id) {
       this.categories.forEach(function (item) {
         if (item.id === id) {
@@ -114,14 +129,12 @@ export default {
     },
 
     editEntry(id) {
-      console.log(id);
       this.$store.commit("setEntryToEdit", id);
       this.$store.commit("setEntry", "edit");
-      this.$router.push("/entry");
+      this.$router.push("/edit-entry");
     },
 
     deleteEntry(id) {
-      let self = this;
       let url = this.baseUrl + "/entry";
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "DELETE";
@@ -133,7 +146,7 @@ export default {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            this.getEntries(self.$store.state.filter);
+            this.getEntries();
           }
         })
         .catch((err) => console.log(err));
@@ -154,14 +167,20 @@ export default {
           } else {
             let data = res.data;
             data.forEach(function (item) {
-              if (item.userId === userId)
-                if (self.$store.state.filter === "All") {
+              if (item.userId === userId) {
+                self.categories.forEach(function (cat) {
+                  if (cat.id === item.categoryId) {
+                    item.categoryName = cat.name;
+                  }
+                });
+                if (self.$store.state.filter === "all") {
                   self.entries.push(item);
                 } else {
-                  if (item.categoryName === self.$store.state.filter) {
+                  if (item.categoryId === self.$store.state.filterId) {
                     self.entries.push(item);
                   }
                 }
+              }
             });
           }
         })
@@ -172,7 +191,7 @@ export default {
       callParameters.method = "GET";
       let url = this.baseUrl + "/categories";
       let self = this;
-      let userId = this.$store.state.userId;
+
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
@@ -181,8 +200,14 @@ export default {
           } else {
             let data = res.data;
             data.forEach(function (item) {
-              if (item.userId === userId) {
-                self.categories.push({ name: item.name, id: item.id });
+              if (item.userId === self.$store.state.userId) {
+                console.log(item);
+                self.categories.push({
+                  name: item.name,
+                  id: item.id,
+                  feeling: item.feeling,
+                  description: item.description,
+                });
                 self.options.push(item.name);
               }
             });
@@ -190,10 +215,38 @@ export default {
         })
         .catch((err) => console.log(err));
     },
+    editCategory() {
+      this.$router.push("/edit-category");
+    },
+
+    deleteCategory() {
+      let url = this.baseUrl + "/category";
+      let self = this;
+      let callParameters = { ...this.apiCallParameters }; // shallow clone
+      callParameters.method = "DELETE";
+      callParameters.body = JSON.stringify({ id: this.$store.state.filterId });
+
+      fetch(url, callParameters)
+        .then((res) => res.json())
+        .then((res) => {
+          if (!res.status === "success") {
+            this.errors = "Au aparut erori";
+          } else {
+            self.entries.forEach(function (item) {
+              let id = item.id;
+              if (item.categoryId === self.$store.state.filterId) {
+                self.deleteEntry(id);
+              }
+            });
+          }
+        })
+        .catch((err) => console.log(err));
+      this.getCategory();
+    },
   },
   beforeMount() {
     this.getCategory();
-    this.getEntries("All");
+    this.getEntries();
   },
 };
 </script>

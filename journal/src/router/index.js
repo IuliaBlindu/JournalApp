@@ -2,8 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import Home from "../views/Home.vue";
 import MyProfile from "../views/MyProfile.vue";
-import JournalEntry from "../views/JournalEntry.vue";
+import NewJournalEntry from "../views/NewJournalEntry.vue";
+import EditEntry from "../views/EditEntry.vue";
 import NewCategory from "../views/NewCategory.vue";
+import EditCategory from "../views/EditCategory.vue";
 
 const routes = [
   {
@@ -23,13 +25,23 @@ const routes = [
   },
   {
     path: "/entry",
-    name: "JournalEntry",
-    component: JournalEntry
+    name: "NewJournalEntry",
+    component: NewJournalEntry
   },
   {
     path: "/category",
     name: "NewCategory",
     component: NewCategory
+  },
+  {
+    path: "/edit-entry",
+    name: "EditEntry",
+    component: EditEntry
+  },
+  {
+    path: "/edit-category",
+    name: "EditCategory",
+    component: EditCategory
   }
 ];
 

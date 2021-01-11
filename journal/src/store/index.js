@@ -6,10 +6,12 @@ const store = new Vuex.Store({
     userId: null,
     isNavOpen: false,
     categoryAction: null,
-    entryAction: "Add",
+    entryAction: "add",
     entryToEdit: null,
-    filter: "All",
-    filterId: null
+    filter: "all",
+    filterId: null,
+    description: null,
+    feeling: null
   },
 
   mutations: {
@@ -37,6 +39,23 @@ const store = new Vuex.Store({
     setFilterId: (state, id) => {
       state.filterId = id;
     },
+    setDescription: (state, description) => {
+      state.description = description;
+    },
+    setFeeling: (state, feeling) => {
+      state.feeling = feeling;
+    },
+    emptyStates: state => {
+      state.userName = null;
+      state.userId = null;
+      state.isNavOpen = false;
+      state.categoryAction = null;
+      state.entryToEdit = null;
+      state.filter = "all";
+      state.filterId = null;
+      state.description = null;
+      state.feelings = null;
+    }
   }
 });
 

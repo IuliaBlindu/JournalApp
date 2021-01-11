@@ -20,13 +20,12 @@ export default {
   computed: {
     isBurgerActive() {
       return this.$store.state.isNavOpen;
-    }
+    },
   },
   methods: {
     toggle() {
-      console.log("deschide Navbar");
       this.$store.commit("toggleNav");
-    }
-  }
+    },
+  },
 };
 </script>

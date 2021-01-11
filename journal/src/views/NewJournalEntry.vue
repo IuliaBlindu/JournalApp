@@ -7,34 +7,26 @@
       </nav>
 
       <span class="userTitle">{{ this.$store.state.userName }}</span>
-      <span class="journalTitle">{{pageTitle }}</span>
+      <span class="journalTitle">{{ pageTitle }}</span>
     </div>
     <div class="entryDiv">
       <EntryForm />
     </div>
     <Sidebar>
       <span class="userTitleS">{{ this.$store.state.userName }}</span>
-      <span class="journalTitleS">{{title }}</span>
+      <span class="journalTitleS">{{ title }}</span>
       <ul class="sidebar-panel-nav">
         <li>
-          <router-link to="/home">
-            <Journal />My Journal
-          </router-link>
+          <router-link to="/home"> <Journal />My Journal </router-link>
         </li>
         <li>
-          <router-link to="/entry">
-            <NewEntry />New Entry
-          </router-link>
+          <router-link to="/entry"> <NewEntry />New Entry </router-link>
         </li>
         <li>
-          <router-link to="/profile">
-            <Profile />Profile
-          </router-link>
+          <router-link to="/profile"> <Profile />Profile </router-link>
         </li>
         <li>
-          <router-link to="/">
-            <Logout />Logout
-          </router-link>
+          <router-link to="/"> <Logout />Logout </router-link>
         </li>
       </ul>
     </Sidebar>
@@ -50,7 +42,7 @@ import NewEntry from "../assets/icons/NewEntry";
 import Profile from "../assets/icons/Profile";
 import Logout from "../assets/icons/Logout";
 export default {
-  name: "JournalEntry",
+  name: "NewJournalEntry",
   components: {
     Burger,
     Sidebar,
@@ -58,7 +50,7 @@ export default {
     NewEntry,
     Profile,
     Logout,
-    EntryForm
+    EntryForm,
   },
   data() {
     return { title: "'s journal", pageTitle: "'s new entry" };
@@ -70,7 +62,10 @@ export default {
     },
     isBurgerActive() {
       return this.$store.state.isNavOpen;
-    }
-  }
+    },
+  },
+  beforeMount() {
+    this.$store.commit("setEntry", "add");
+  },
 };
 </script>

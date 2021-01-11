@@ -103,7 +103,6 @@ export default {
   },
   methods: {
     changeAction() {
-      console.log("Buna");
       if (this.formAction == this.loginTitle) {
         this.formAction = this.registerTitle;
         this.switchText = this.registerText;
@@ -126,7 +125,6 @@ export default {
             this.errors = "Au aparut erori";
           } else {
             this.$router.push("/home");
-            console.log(res.loginSuccessfull);
             this.$store.commit("setUserName", res.name);
             this.$store.commit("setUserId", res.id);
           }
@@ -134,13 +132,11 @@ export default {
         .catch((err) => console.log(err));
     },
     register() {
-      console.log(this.formData);
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "POST";
       let url = this.baseUrl + "/register";
       delete this.formData.id;
       callParameters.body = JSON.stringify(this.formData);
-      console.log(callParameters.body);
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
@@ -155,6 +151,9 @@ export default {
         })
         .catch((err) => console.log(err));
     },
+  },
+  beforeMount() {
+    //this.$store.commit("emptyStates");
   },
 };
 </script>
