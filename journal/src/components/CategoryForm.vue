@@ -47,7 +47,7 @@
               v-model="formData.feeling"
             />
           </div>
-
+          <p class="error">{{ errors }}</p>
           <button type="submit" class="btn btn-primary">
             {{ this.$store.state.categoryAction }}
           </button>
@@ -97,7 +97,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Au aparut erori";
+            this.errors = "Errors occured during connection with database!";
           } else {
             this.formData.id = res.id;
             this.$router.push("/entry");
@@ -116,7 +116,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Au aparut erori";
+            this.errors = "Errors occured during connection with database!";
           } else {
             localStorage.categoryId = null;
             localStorage.categoryName = null;
@@ -135,7 +135,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Au aparut erori";
+            this.errors = "Errors occured during connection with database!";
           } else {
             self.formData.id = localStorage.id;
             self.formData.name = res.data.name;

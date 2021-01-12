@@ -122,6 +122,7 @@
               </div>
             </div>
           </div>
+          <p class="error">{{ errors }}</p>
           <button type="submit" class="btn btn-primary">
             {{ this.$store.state.entryAction }}
           </button>
@@ -217,7 +218,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Au aparut erori";
+            this.errors = "Errors occured during connection with database!";
           } else {
             this.$router.push("/home");
           }
@@ -234,7 +235,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Au aparut erori";
+            this.errors = "Errors occured during connection with database!";
           } else {
             this.$router.push("/home");
           }
@@ -250,7 +251,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Au aparut erori";
+            this.errors = "Errors occured during connection with database!";
           } else {
             self.formData.id = localStorage.entryToEdit;
             self.formData.userId = res.data.userId;
