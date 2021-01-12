@@ -104,12 +104,17 @@ export default {
       errors: "",
     };
   },
+  computed: {
+    cateogryId() {
+      return localStorage.categoryId;
+    },
+  },
   watch: {
     filter(newValue) {
       //optional parameters
       console.log(this.categories[newValue].id);
+      localStorage.categoryId = this.categories[newValue].id;
       this.$store.commit("setFilter", this.categories[newValue].name);
-      this.$store.commit("setFilterId", this.categories[newValue].id);
       this.$store.commit(
         "setDescription",
         this.categories[newValue].description
@@ -129,7 +134,7 @@ export default {
     },
 
     editEntry(id) {
-      this.$store.commit("setEntryToEdit", id);
+      localStorage.entryToEdit = id;
       this.$store.commit("setEntry", "edit");
       this.$router.push("/edit-entry");
     },
@@ -158,7 +163,7 @@ export default {
       callParameters.method = "GET";
       let url = this.baseUrl + "/entries";
       let self = this;
-      let userId = this.$store.state.userId;
+      let userId = localStorage.userId;
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
@@ -173,10 +178,10 @@ export default {
                     item.categoryName = cat.name;
                   }
                 });
-                if (self.$store.state.filter === "all") {
+                if (localStorage.categoryId === "null") {
                   self.entries.push(item);
                 } else {
-                  if (item.categoryId === self.$store.state.filterId) {
+                  if (item.categoryId === localStorage.categoryId) {
                     self.entries.push(item);
                   }
                 }
@@ -200,7 +205,7 @@ export default {
           } else {
             let data = res.data;
             data.forEach(function (item) {
-              if (item.userId === self.$store.state.userId) {
+              if (item.userId === localStorage.userId) {
                 console.log(item);
                 self.categories.push({
                   name: item.name,
@@ -224,7 +229,7 @@ export default {
       let self = this;
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "DELETE";
-      callParameters.body = JSON.stringify({ id: this.$store.state.filterId });
+      callParameters.body = JSON.stringify({ id: localStorage.categoryId });
 
       fetch(url, callParameters)
         .then((res) => res.json())
@@ -234,7 +239,7 @@ export default {
           } else {
             self.entries.forEach(function (item) {
               let id = item.id;
-              if (item.categoryId === self.$store.state.filterId) {
+              if (item.categoryId === localStorage.categoryId) {
                 self.deleteEntry(id);
               }
             });

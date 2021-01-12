@@ -125,8 +125,8 @@ export default {
             this.errors = "Au aparut erori";
           } else {
             this.$router.push("/home");
-            this.$store.commit("setUserName", res.name);
-            this.$store.commit("setUserId", res.id);
+            localStorage.userId = res.id;
+            localStorage.name = res.name;
           }
         })
         .catch((err) => console.log(err));

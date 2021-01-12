@@ -6,14 +6,14 @@
         <Burger></Burger>
       </nav>
 
-      <span class="userTitle">{{ this.$store.state.userName }}</span>
+      <span class="userTitle">{{ user }}</span>
       <span class="journalTitle">{{ pageTitle }}</span>
     </div>
     <div class="entryDiv">
       <EntryForm />
     </div>
     <Sidebar>
-      <span class="userTitleS">{{ this.$store.state.userName }}</span>
+      <span class="userTitleS">{{ user }}</span>
       <span class="journalTitleS">{{ title }}</span>
       <ul class="sidebar-panel-nav">
         <li>
@@ -56,12 +56,11 @@ export default {
     return { title: "'s journal", pageTitle: "'s new entry" };
   },
   computed: {
-    user() {
-      //this is cached until the dependecy is changed
-      return this.$store.state.userId;
-    },
     isBurgerActive() {
       return this.$store.state.isNavOpen;
+    },
+    user() {
+      return localStorage.userName;
     },
   },
   beforeMount() {

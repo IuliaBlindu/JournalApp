@@ -87,7 +87,7 @@ export default {
       callParameters.method = "POST";
       let url = this.baseUrl + "/category";
       delete this.formData.id;
-      this.formData.userId = this.$store.state.userId;
+      this.formData.userId = localStorage.userId;
       callParameters.body = JSON.stringify(this.formData);
       fetch(url, callParameters)
         .then((res) => res.json())
@@ -105,7 +105,7 @@ export default {
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "PUT";
       let url = this.baseUrl + "/category";
-      this.formData.userId = this.$store.state.userId;
+      this.formData.userId = localStorage.userId;
       callParameters.body = JSON.stringify(this.formData);
       fetch(url, callParameters)
         .then((res) => res.json())
@@ -114,8 +114,8 @@ export default {
             this.errors = "Au aparut erori";
           } else {
             this.formData.id = res.id;
+            localStorage.categoryId = this.formData.id;
             this.$store.commit("setFilter", this.formData.name);
-            this.$store.commit("setFilterId", this.formData.id);
             this.$store.commit("setDescription", this.formData.description);
             this.$store.commit("setFeeling", this.formData.feeling);
             this.$router.push("/home");
@@ -128,15 +128,14 @@ export default {
       let self = this;
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "GET";
-      console.log(this.$store.state.filterId);
-      let url = this.baseUrl + "/category/" + this.$store.state.filterId;
+      let url = this.baseUrl + "/category/" + localStorage.categoryId;
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            self.formData.id = self.$store.state.filterId;
+            self.formData.id = localStorage.categoryId;
             self.formData.name = res.data.name;
             self.formData.description = res.data.description;
             self.formData.feeling = res.data.feeling;

@@ -6,32 +6,24 @@
         <Burger></Burger>
       </nav>
 
-      <span class="userTitle">{{ this.$store.state.userName }}</span>
-      <span class="journalTitle">{{pageTitle }}</span>
+      <span class="userTitle">{{ user }}</span>
+      <span class="journalTitle">{{ pageTitle }}</span>
     </div>
     <Sidebar>
-      <span class="userTitleS">{{ this.$store.state.userName }}</span>
-      <span class="journalTitleS">{{title }}</span>
+      <span class="userTitleS">{{ user }}</span>
+      <span class="journalTitleS">{{ title }}</span>
       <ul class="sidebar-panel-nav">
         <li>
-          <router-link to="/home">
-            <Journal />My Journal
-          </router-link>
+          <router-link to="/home"> <Journal />My Journal </router-link>
         </li>
         <li>
-          <router-link to="/entry">
-            <NewEntry />New Entry
-          </router-link>
+          <router-link to="/entry"> <NewEntry />New Entry </router-link>
         </li>
         <li>
-          <router-link to="/profile">
-            <Profile />Profile
-          </router-link>
+          <router-link to="/profile"> <Profile />Profile </router-link>
         </li>
         <li>
-          <router-link to="/">
-            <Logout />Logout
-          </router-link>
+          <router-link to="/"> <Logout />Logout </router-link>
         </li>
       </ul>
     </Sidebar>
@@ -53,19 +45,18 @@ export default {
     Journal,
     NewEntry,
     Profile,
-    Logout
+    Logout,
   },
   data() {
     return { title: "'s journal", pageTitle: "'s profile" };
   },
   computed: {
-    user() {
-      //this is cached until the dependecy is changed
-      return this.$store.state.userId;
-    },
     isBurgerActive() {
       return this.$store.state.isNavOpen;
-    }
-  }
+    },
+    user() {
+      return localStorage.userName;
+    },
+  },
 };
 </script>

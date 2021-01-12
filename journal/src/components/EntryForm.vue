@@ -187,7 +187,7 @@ export default {
           } else {
             let data = res.data;
             data.forEach(function (item) {
-              if (item.userId === self.$store.state.userId) {
+              if (item.userId === localStorage.userId) {
                 self.categories.push({ name: item.name, id: item.id });
                 self.options.push(item.name);
               }
@@ -200,7 +200,7 @@ export default {
       delete this.formData.id;
       this.formData.categoryId = this.categories[this.formData.categoryId].id;
 
-      this.formData.userId = this.$store.state.userId;
+      this.formData.userId = localStorage.userId;
 
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "POST";
@@ -239,14 +239,14 @@ export default {
       let self = this;
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "GET";
-      let url = this.baseUrl + "/entry/" + this.$store.state.entryToEdit;
+      let url = this.baseUrl + "/entry/" + localStorage.entryToEdit;
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            self.formData.id = self.$store.state.entryToEdit;
+            self.formData.id = localStorage.entryToEdit;
             self.formData.userId = res.data.userId;
             self.formData.categoryId = res.data.categoryId;
             self.formData.title = res.data.title;
