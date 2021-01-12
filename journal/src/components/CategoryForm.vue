@@ -2,7 +2,11 @@
   <div>
     <div class="card" id="categoryCard">
       <div class="card-body" id="categoryCardBody">
-        <h4 class="title">New Category</h4>
+        <h4 class="title">
+          <span v-if="this.$store.state.categoryAction === 'add'"> New </span>
+          <span v-if="this.$store.state.categoryAction === 'edit'"> Edit </span>
+          Category
+        </h4>
         <form
           form
           @submit.prevent="
@@ -106,6 +110,7 @@ export default {
       callParameters.method = "PUT";
       let url = this.baseUrl + "/category";
       this.formData.userId = localStorage.userId;
+      this.formData.id = localStorage.categoryId;
       callParameters.body = JSON.stringify(this.formData);
       fetch(url, callParameters)
         .then((res) => res.json())
@@ -113,11 +118,8 @@ export default {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            this.formData.id = res.id;
-            localStorage.categoryId = this.formData.id;
-            this.$store.commit("setFilter", this.formData.name);
-            this.$store.commit("setDescription", this.formData.description);
-            this.$store.commit("setFeeling", this.formData.feeling);
+            localStorage.categoryId = null;
+            localStorage.categoryName = null;
             this.$router.push("/home");
           }
         })
@@ -135,7 +137,7 @@ export default {
           if (!res.status === "success") {
             this.errors = "Au aparut erori";
           } else {
-            self.formData.id = localStorage.categoryId;
+            self.formData.id = localStorage.id;
             self.formData.name = res.data.name;
             self.formData.description = res.data.description;
             self.formData.feeling = res.data.feeling;

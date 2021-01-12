@@ -1,30 +1,25 @@
 <template>
   <div class="listOfEntries">
-    <h3 class="title" v-if="this.$store.state.filter !== 'all'">
-      {{ this.$store.state.filter }}
+    <h3 class="title" v-if="name !== null">
+      {{ name }}
     </h3>
-    <h3 class="title" v-if="this.$store.state.filter === 'all'">All entries</h3>
-    <button
-      class="btn btn-primary btn-sm mr-2 mb-2"
-      v-if="this.$store.state.filter !== 'all'"
-      v-on:click="editCategory()"
-    >
-      <Edit />
-    </button>
-    <button
-      class="btn btn-secondary btn-sm mb-2"
-      v-if="this.$store.state.filter !== 'all'"
-      v-on:click="deleteCategory()"
-    >
-      <Delete /></button
-    ><br v-if="this.$store.state.filter !== 'all'" />
-    <span class="description" v-if="this.$store.state.filter !== 'all'">
-      {{ this.$store.state.description }} </span
-    ><br v-if="this.$store.state.filter !== 'all'" />
-    <span class="feeling" v-if="this.$store.state.filter !== 'all'">
-      {{ this.$store.state.feeling }} </span
-    ><br v-if="this.$store.state.filter !== 'all'" /><br />
-
+    <h3 class="title" v-if="name === null">All entries</h3>
+    <div v-if="name !== null">
+      <button
+        class="btn btn-primary btn-sm mr-2 mb-2"
+        v-on:click="editCategory()"
+      >
+        <Edit />
+      </button>
+      <button
+        class="btn btn-secondary btn-sm mb-2"
+        v-on:click="deleteCategory()"
+      >
+        <Delete /></button
+      ><br />
+      <span class="description"> {{ description }} </span><br />
+      <span class="feeling"> {{ feeling }} </span><br /><br />
+    </div>
     <Multiselect v-model="filter" :options="options" placeholder="Category" />
     <br />
     <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -87,7 +82,10 @@ export default {
     return {
       value: null,
       filter: "null",
-      categories: [{ name: "all", id: null, feeling: null, description: null }],
+      description: "",
+      name: "",
+      feeling: "",
+      categories: [{ name: null, id: null, feeling: null, description: null }],
       options: ["all"],
       entries: [],
       apiCallParameters: {
@@ -108,19 +106,18 @@ export default {
     cateogryId() {
       return localStorage.categoryId;
     },
+    categoryName() {
+      return localStorage.categoryName;
+    },
   },
   watch: {
     filter(newValue) {
       //optional parameters
-      console.log(this.categories[newValue].id);
       localStorage.categoryId = this.categories[newValue].id;
-      this.$store.commit("setFilter", this.categories[newValue].name);
-      this.$store.commit(
-        "setDescription",
-        this.categories[newValue].description
-      );
-      this.$store.commit("setFeeling", this.categories[newValue].feeling);
-
+      localStorage.categoryName = this.categories[newValue].name;
+      this.name = this.categories[newValue].name;
+      this.description = this.categories[newValue].description;
+      this.feeling = this.categories[newValue].feeling;
       this.getEntries();
     },
   },
@@ -178,7 +175,7 @@ export default {
                     item.categoryName = cat.name;
                   }
                 });
-                if (localStorage.categoryId === "null") {
+                if (self.name === null) {
                   self.entries.push(item);
                 } else {
                   if (item.categoryId === localStorage.categoryId) {
@@ -239,17 +236,20 @@ export default {
           } else {
             self.entries.forEach(function (item) {
               let id = item.id;
+              console.log(item.categoryId);
+              console.log(localStorage.categoryId);
               if (item.categoryId === localStorage.categoryId) {
                 self.deleteEntry(id);
               }
+              self.$router.go();
             });
           }
         })
         .catch((err) => console.log(err));
-      this.getCategory();
     },
   },
   beforeMount() {
+    this.name = null;
     this.getCategory();
     this.getEntries();
   },

@@ -2,6 +2,12 @@
   <div>
     <div class="card" id="entryCard">
       <div class="card-body" id="entryCardBody">
+        <h4 class="title">
+          <span v-if="this.$store.state.entryAction === 'add'"> New </span>
+          <span v-if="this.$store.state.entryAction === 'edit'"> Edit </span>
+          Entry
+        </h4>
+        <br />
         <form
           form
           @submit.prevent="

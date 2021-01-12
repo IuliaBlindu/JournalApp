@@ -16,16 +16,19 @@
       <span class="journalTitleS">{{ title }}</span>
       <ul class="sidebar-panel-nav">
         <li>
-          <router-link to="/home"> <Journal />My Journal </router-link>
+          <router-link to="/home">
+            <Journal style="float: left; margin-right: 4px" /> My Journal
+          </router-link>
         </li>
         <li>
-          <router-link to="/entry"> <NewEntry />New Entry </router-link>
+          <router-link to="/entry">
+            <NewEntry style="float: left; margin-right: 4px" />New Entry
+          </router-link>
         </li>
         <li>
-          <router-link to="/profile"> <Profile />Profile </router-link>
-        </li>
-        <li>
-          <router-link to="/"> <Logout />Logout </router-link>
+          <router-link to="/">
+            <Logout style="float: left; margin-right: 4px" />Logout
+          </router-link>
         </li>
       </ul>
     </Sidebar>
@@ -38,7 +41,6 @@ import Sidebar from "../components/Menu/Sidebar.vue";
 import ListOfEntries from "../components/ListOfEntries.vue";
 import Journal from "../assets/icons/Journal";
 import NewEntry from "../assets/icons/NewEntry";
-import Profile from "../assets/icons/Profile";
 import Logout from "../assets/icons/Logout";
 export default {
   name: "Home",
@@ -47,7 +49,6 @@ export default {
     Sidebar,
     Journal,
     NewEntry,
-    Profile,
     Logout,
     ListOfEntries,
   },

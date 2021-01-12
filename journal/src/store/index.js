@@ -4,9 +4,8 @@ const store = new Vuex.Store({
   state: {
     isNavOpen: false,
     categoryAction: null,
-    entryAction: "add",
+    entryAction: null,
     filter: "all",
-    description: null,
     feeling: null
   },
 
@@ -20,12 +19,6 @@ const store = new Vuex.Store({
     setEntry: (state, name) => {
       state.entryAction = name;
     },
-    setFilter: (state, filter) => {
-      state.filter = filter;
-    },
-    setDescription: (state, description) => {
-      state.description = description;
-    },
     setFeeling: (state, feeling) => {
       state.feeling = feeling;
     },
@@ -33,7 +26,6 @@ const store = new Vuex.Store({
       state.isNavOpen = false;
       state.categoryAction = null;
       state.filter = "all";
-      state.description = null;
       state.feelings = null;
     }
   }

@@ -49,6 +49,7 @@
                 v-model="formData.password"
               />
             </div>
+            <p class="error">{{ errors }}</p>
             <button type="submit" class="btn btn-primary">
               {{ formAction }}
             </button>
@@ -101,6 +102,11 @@ export default {
       errors: "",
     };
   },
+  watch: {
+    formAction() {
+      this.errors = "";
+    },
+  },
   methods: {
     changeAction() {
       if (this.formAction == this.loginTitle) {
@@ -122,7 +128,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (res.loginSuccessfull === "false") {
-            this.errors = "Au aparut erori";
+            this.errors = "Wrong credentials";
           } else {
             this.$router.push("/home");
             localStorage.userId = res.id;
@@ -141,7 +147,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (res.registerSuccessful === "false") {
-            this.errors = "Au aparut erori";
+            this.errors = "User already exists!";
           } else {
             this.formData.id = res.id;
             delete this.formData.password;

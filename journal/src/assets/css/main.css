@@ -37,6 +37,11 @@ body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.error {
+  color: rgb(197, 161, 145);
+  font-size: 14px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 .title-sidebar {
   color: rgb(214, 234, 238);
   font-weight: lighter;
@@ -134,6 +139,7 @@ ul.sidebar-panel-nav > li > a {
   text-decoration: none;
   font-size: 1.4rem;
   padding-bottom: 0.5em;
+  line-height: 56px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .slide-enter-active,
