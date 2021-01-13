@@ -222,30 +222,33 @@ export default {
     },
 
     deleteCategory() {
-      let url = this.baseUrl + "/category";
-      let self = this;
-      let callParameters = { ...this.apiCallParameters }; // shallow clone
-      callParameters.method = "DELETE";
-      callParameters.body = JSON.stringify({ id: localStorage.categoryId });
-
-      fetch(url, callParameters)
-        .then((res) => res.json())
-        .then((res) => {
-          if (!res.status === "success") {
-            this.errors = "Au aparut erori";
-          } else {
-            self.entries.forEach(function (item) {
-              let id = item.id;
-              console.log(item.categoryId);
-              console.log(localStorage.categoryId);
-              if (item.categoryId === localStorage.categoryId) {
-                self.deleteEntry(id);
-              }
-            });
-          }
-        })
-        .catch((err) => console.log(err));
-      self.$router.go();
+      let token = localStorage.getItem("token");
+      if (token) {
+        let url = this.baseUrl + "/category";
+        let self = this;
+        let callParameters = { ...this.apiCallParameters }; // shallow clone
+        callParameters.method = "DELETE";
+        callParameters.headers.Authorization = "Bearer " + token;
+        callParameters.body = JSON.stringify({ id: localStorage.categoryId });
+        fetch(url, callParameters)
+          .then((res) => res.json())
+          .then((res) => {
+            if (!res.status === "success") {
+              this.errors = "Au aparut erori";
+            } else {
+              self.entries.forEach(function (item) {
+                let id = item.id;
+                console.log(item.categoryId);
+                console.log(localStorage.categoryId);
+                if (item.categoryId === localStorage.categoryId) {
+                  self.deleteEntry(id);
+                }
+              });
+            }
+          })
+          .catch((err) => console.log(err));
+        self.$router.go();
+      }
     },
   },
   afterMount() {

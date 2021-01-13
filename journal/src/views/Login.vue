@@ -133,6 +133,7 @@ export default {
             this.$router.push("/home");
             localStorage.userId = res.id;
             localStorage.name = res.name;
+            localStorage.token = res.token;
           }
         })
         .catch((err) => console.log(err));

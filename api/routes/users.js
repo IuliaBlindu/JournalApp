@@ -109,15 +109,29 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/category", async (req, res) => {
-  let data = req.body;
-  const doc = await db.collection("categories").add(data);
-  let response = {
-    status: "success",
-    id: doc.id
-  };
-  console.log(response.status);
-  res.send(response);
+router.post("/category", verifyToken, (req, res) => {
+  jwt.verify(req.token, secret, async (err, decoded) => {
+
+    if (err) {
+      if (err.expiredAt) {
+        //if token expired, the err object will have an 'expiredAt' key
+        res.send(({ message: 'Your token has expired. Please re-authenticate' }))
+      } else {
+        res.send({ message: 'You are NOT authorized to access this resource' })
+      }
+    } else {
+      let data = req.body;
+
+      const doc = await db.collection("categories").add(data);
+      let response = {
+        status: "success",
+        id: doc.id
+      };
+      console.log(response.status);
+      res.send(response);
+    }
+  })
+
 });
 
 router.get("/category/:id", async (req, res) => {
@@ -149,26 +163,51 @@ router.get("/categories", async (req, res) => {
   res.send(response);
 });
 
-router.put("/category", async (req, res) => {
-  let data = req.body;
-  console.log(data);
-  const cateogry = db.collection("categories").doc(data.id);
-  delete data.id;
-  const updated = await cateogry.update(data);
-  let response = { status: "success" };
-  console.log(response.status);
-  res.send(response);
+router.put("/category", verifyToken, (req, res) => {
+  jwt.verify(req.token, secret, async (err, decoded) => {
+
+    if (err) {
+      if (err.expiredAt) {
+        //if token expired, the err object will have an 'expiredAt' key
+        res.send(({ message: 'Your token has expired. Please re-authenticate' }))
+      } else {
+        res.send({ message: 'You are NOT authorized to access this resource' })
+      }
+    } else {
+      let data = req.body;
+      console.log(data);
+      const cateogry = db.collection("categories").doc(data.id);
+      delete data.id;
+      const updated = await cateogry.update(data);
+      let response = { status: "success" };
+      console.log(response.status);
+      res.send(response);
+    }
+
+  })
 });
 
-router.delete("/category", async (req, res) => {
-  let data = req.body;
-  console.log(data);
-  const cateogry = db.collection("categories").doc(data.id);
-  delete data.id;
-  const deleted = await cateogry.delete();
-  let response = { status: "success" };
-  console.log(response.status);
-  res.send(response);
+router.delete("/category", verifyToken, (req, res) => {
+  jwt.verify(req.token, secret, async (err, decoded) => {
+
+    if (err) {
+      if (err.expiredAt) {
+        //if token expired, the err object will have an 'expiredAt' key
+        res.send(({ message: 'Your token has expired. Please re-authenticate' }))
+      } else {
+        res.send({ message: 'You are NOT authorized to access this resource' })
+      }
+    } else {
+      let data = req.body;
+      console.log(data);
+      const cateogry = db.collection("categories").doc(data.id);
+      delete data.id;
+      const deleted = await cateogry.delete();
+      let response = { status: "success" };
+      console.log(response.status);
+      res.send(response);
+    }
+  })
 });
 
 router.post("/entry", async (req, res) => {
