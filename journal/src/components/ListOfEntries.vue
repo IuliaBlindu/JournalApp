@@ -241,12 +241,15 @@ export default {
               if (item.categoryId === localStorage.categoryId) {
                 self.deleteEntry(id);
               }
-              self.$router.go();
             });
           }
         })
         .catch((err) => console.log(err));
+      self.$router.go();
     },
+  },
+  afterMount() {
+    location.reload();
   },
   beforeMount() {
     this.name = null;

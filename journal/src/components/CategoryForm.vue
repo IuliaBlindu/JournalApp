@@ -63,6 +63,7 @@ export default {
   data() {
     return {
       value: null,
+      categories: [],
       formData: {
         id: "id",
         name: null,
@@ -86,47 +87,89 @@ export default {
   },
 
   methods: {
-    post() {
+    getCategory() {
       let callParameters = { ...this.apiCallParameters }; // shallow clone
-      callParameters.method = "POST";
-      let url = this.baseUrl + "/category";
-      delete this.formData.id;
-      this.formData.userId = localStorage.userId;
-      callParameters.body = JSON.stringify(this.formData);
+      callParameters.method = "GET";
+      let url = this.baseUrl + "/categories";
+      let self = this;
+
       fetch(url, callParameters)
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Errors occured during connection with database!";
+            self.errors = "Au aparut erori";
           } else {
-            this.formData.id = res.id;
-            this.$router.push("/entry");
+            let data = res.data;
+            data.forEach(function (item) {
+              if (item.userId === localStorage.userId) {
+                self.categories.push(item.name);
+              }
+            });
           }
         })
         .catch((err) => console.log(err));
+    },
+    verifyDuplicity() {
+      let self = this;
+      let ok = 1;
+      this.categories.forEach(function (category) {
+        if (self.formData.name === category) {
+          ok = 0;
+        }
+      });
+      console.log(ok);
+      return ok;
+    },
+    post() {
+      let canPost = this.verifyDuplicity();
+      if (canPost === 1) {
+        let callParameters = { ...this.apiCallParameters }; // shallow clone
+        callParameters.method = "POST";
+        let url = this.baseUrl + "/category";
+        delete this.formData.id;
+        this.formData.userId = localStorage.userId;
+        callParameters.body = JSON.stringify(this.formData);
+        fetch(url, callParameters)
+          .then((res) => res.json())
+          .then((res) => {
+            if (!res.status === "success") {
+              this.errors = "Errors occured during connection with database!";
+            } else {
+              this.formData.id = res.id;
+              this.$router.push("/entry");
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        this.errors = "This category name already exists";
+      }
     },
     put() {
-      let callParameters = { ...this.apiCallParameters }; // shallow clone
-      callParameters.method = "PUT";
-      let url = this.baseUrl + "/category";
-      this.formData.userId = localStorage.userId;
-      this.formData.id = localStorage.categoryId;
-      callParameters.body = JSON.stringify(this.formData);
-      fetch(url, callParameters)
-        .then((res) => res.json())
-        .then((res) => {
-          if (!res.status === "success") {
-            this.errors = "Errors occured during connection with database!";
-          } else {
-            localStorage.categoryId = null;
-            localStorage.categoryName = null;
-            this.$router.push("/home");
-          }
-        })
-        .catch((err) => console.log(err));
+      let canPost = this.verifyDuplicity();
+      if (canPost === 1) {
+        let callParameters = { ...this.apiCallParameters }; // shallow clone
+        callParameters.method = "PUT";
+        let url = this.baseUrl + "/category";
+        this.formData.userId = localStorage.userId;
+        this.formData.id = localStorage.categoryId;
+        callParameters.body = JSON.stringify(this.formData);
+        fetch(url, callParameters)
+          .then((res) => res.json())
+          .then((res) => {
+            if (!res.status === "success") {
+              this.errors = "Errors occured during connection with database!";
+            } else {
+              localStorage.categoryId = null;
+              localStorage.categoryName = null;
+              this.$router.push("/home");
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        this.errors = "This category name already exists";
+      }
     },
     fillForm() {
-      console.log("here");
       let self = this;
       let callParameters = { ...this.apiCallParameters }; // shallow clone
       callParameters.method = "GET";
@@ -147,6 +190,7 @@ export default {
     },
   },
   beforeMount() {
+    this.getCategory();
     if (this.$store.state.categoryAction === "edit") {
       this.fillForm();
     }

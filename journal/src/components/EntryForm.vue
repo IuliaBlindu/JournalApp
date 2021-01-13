@@ -148,8 +148,8 @@ export default {
       formData: {
         id: "id",
         userId: null,
-        categoryId: "null",
-        title: "null",
+        categoryId: null,
+        title: null,
         date: null,
         description: null,
         feeling: null,
