@@ -204,43 +204,53 @@ export default {
         .catch((err) => console.log(err));
     },
     post() {
-      delete this.formData.id;
-      this.formData.categoryId = this.categories[this.formData.categoryId].id;
-
-      this.formData.userId = localStorage.userId;
-
-      let callParameters = { ...this.apiCallParameters }; // shallow clone
-      callParameters.method = "POST";
-      let url = this.baseUrl + "/entry";
-
-      callParameters.body = JSON.stringify(this.formData);
-      fetch(url, callParameters)
-        .then((res) => res.json())
-        .then((res) => {
-          if (!res.status === "success") {
-            this.errors = "Errors occured during connection with database!";
-          } else {
-            this.$router.push("/home");
-          }
-        })
-        .catch((err) => console.log(err));
+      let token = localStorage.getItem("token");
+      if (token) {
+        delete this.formData.id;
+        this.formData.categoryId = this.categories[this.formData.categoryId].id;
+        this.formData.userId = localStorage.userId;
+        let callParameters = { ...this.apiCallParameters }; // shallow clone
+        callParameters.method = "POST";
+        callParameters.headers.Authorization = "Bearer " + token;
+        callParameters.body = JSON.stringify(this.formData);
+        let url = this.baseUrl + "/entry";
+        fetch(url, callParameters)
+          .then((res) => res.json())
+          .then((res) => {
+            if (!res.status === "success") {
+              this.errors = "Errors occured during connection with database!";
+            } else {
+              this.$router.push("/home");
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        this.errors = "No access token";
+      }
     },
     put() {
-      let callParameters = { ...this.apiCallParameters }; // shallow clone
-      callParameters.method = "PUT";
-      let url = this.baseUrl + "/entry";
-
-      callParameters.body = JSON.stringify(this.formData);
-      fetch(url, callParameters)
-        .then((res) => res.json())
-        .then((res) => {
-          if (!res.status === "success") {
-            this.errors = "Errors occured during connection with database!";
-          } else {
-            this.$router.push("/home");
-          }
-        })
-        .catch((err) => console.log(err));
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.formData.categoryId = this.categories[this.formData.categoryId].id;
+        this.formData.userId = localStorage.userId;
+        let callParameters = { ...this.apiCallParameters }; // shallow clone
+        callParameters.method = "PUT";
+        callParameters.headers.Authorization = "Bearer " + token;
+        callParameters.body = JSON.stringify(this.formData);
+        let url = this.baseUrl + "/entry";
+        fetch(url, callParameters)
+          .then((res) => res.json())
+          .then((res) => {
+            if (!res.status === "success") {
+              this.errors = "Errors occured during connection with database!";
+            } else {
+              this.$router.push("/home");
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        this.errors = "No access token";
+      }
     },
     fillForm() {
       let self = this;

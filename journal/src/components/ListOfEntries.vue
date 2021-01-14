@@ -17,11 +17,14 @@
       >
         <Delete /></button
       ><br />
-      <span class="description"> {{ description }} </span><br />
-      <span class="feeling"> {{ feeling }} </span><br /><br />
+      <span class="description" v-if="description"> {{ description }} </span
+      ><br v-if="description" />
+      <span class="feeling" v-if="feeling"> {{ feeling }} </span
+      ><br v-if="feeling" /><br />
     </div>
     <Multiselect v-model="filter" :options="options" placeholder="Category" />
     <br />
+    <p v-if="errors" class="error">{{ errors }}</p>
     <div class="row row-cols-1 row-cols-md-2 g-4">
       <div class="col" v-for="element in entries" :key="element.id">
         <div class="card mb-3">
@@ -137,21 +140,26 @@ export default {
     },
 
     deleteEntry(id) {
-      let url = this.baseUrl + "/entry";
-      let callParameters = { ...this.apiCallParameters }; // shallow clone
-      callParameters.method = "DELETE";
-      callParameters.body = JSON.stringify({ id: id });
-
-      fetch(url, callParameters)
-        .then((res) => res.json())
-        .then((res) => {
-          if (!res.status === "success") {
-            this.errors = "Au aparut erori";
-          } else {
-            this.getEntries();
-          }
-        })
-        .catch((err) => console.log(err));
+      let token = localStorage.getItem("token");
+      if (token) {
+        let url = this.baseUrl + "/entry";
+        let callParameters = { ...this.apiCallParameters }; // shallow clone
+        callParameters.method = "DELETE";
+        callParameters.headers.Authorization = "Bearer " + token;
+        callParameters.body = JSON.stringify({ id: id });
+        fetch(url, callParameters)
+          .then((res) => res.json())
+          .then((res) => {
+            if (!res.status === "success") {
+              this.errors = "Errors at database connection";
+            } else {
+              this.getEntries();
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        this.errors = "No access token";
+      }
     },
 
     getEntries() {
@@ -165,7 +173,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Au aparut erori";
+            this.errors = "Errors at database connection";
           } else {
             let data = res.data;
             data.forEach(function (item) {
@@ -198,7 +206,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (!res.status === "success") {
-            this.errors = "Au aparut erori";
+            this.errors = "Errors at database connection";
           } else {
             let data = res.data;
             data.forEach(function (item) {
@@ -234,7 +242,7 @@ export default {
           .then((res) => res.json())
           .then((res) => {
             if (!res.status === "success") {
-              this.errors = "Au aparut erori";
+              this.errors = "Errors at database connection";
             } else {
               self.entries.forEach(function (item) {
                 let id = item.id;
@@ -248,6 +256,8 @@ export default {
           })
           .catch((err) => console.log(err));
         self.$router.go();
+      } else {
+        this.errors = "No access token";
       }
     },
   },

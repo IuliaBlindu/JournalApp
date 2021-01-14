@@ -132,7 +132,7 @@ export default {
           } else {
             this.$router.push("/home");
             localStorage.userId = res.id;
-            localStorage.name = res.name;
+            localStorage.userName = res.name;
             localStorage.token = res.token;
           }
         })
@@ -160,7 +160,7 @@ export default {
     },
   },
   beforeMount() {
-    //this.$store.commit("emptyStates");
+    localStorage.clear();
   },
 };
 </script>

@@ -143,6 +143,8 @@ export default {
               }
             })
             .catch((err) => console.log(err));
+        } else {
+          this.errors = "No access token";
         }
       } else {
         this.errors = "This category name already exists";
@@ -172,6 +174,8 @@ export default {
               }
             })
             .catch((err) => console.log(err));
+        } else {
+          this.errors = "No access token";
         }
       } else {
         this.errors = "This category name already exists";
