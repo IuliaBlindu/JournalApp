@@ -161,7 +161,6 @@ export default {
         this.errors = "No access token";
       }
     },
-
     getEntries() {
       this.entries = [];
       let callParameters = { ...this.apiCallParameters }; // shallow clone
@@ -192,6 +191,7 @@ export default {
                 }
               }
             });
+            self.entries.sort((a, b) => (a.date > b.date ? 1 : -1));
           }
         })
         .catch((err) => console.log(err));

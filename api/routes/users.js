@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-
+var faker = require("faker");
 var admin = require("firebase-admin");
 
 var serviceAccount = require("../firebaseConfig/journalapp-52f21-firebase-adminsdk-va5p8-3dfcdd75d8.json");
@@ -15,6 +15,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 13;
 
 const jwt = require("jsonwebtoken");
+const { date } = require("faker");
 let secret = "hiddenSecret";
 
 // MIDDLEWARE
@@ -309,6 +310,32 @@ router.delete("/entry", verifyToken, (req, res) => {
       res.send(response);
     }
   })
+});
+
+router.post("/generate", async (req, res) => {
+  categoryIds = ["yRiIqK3JDn2B4FxMbw7l", "OWbVDQlE0WJ7yWTlDDRb"];
+  feelings = ["sad", "happy", "angry", "neutral"];
+
+  for (let i = 0; i < 50; i++) {
+    let cId = Math.floor(Math.random() * Math.floor(2));
+    let fId = Math.floor(Math.random() * Math.floor(4));
+    let date = faker.date.future();
+    date = date.toString();
+    console.log(date);
+    date = date.split(" ");
+    let data = {
+      userId: "yRzPED1S3RrL7g4GDY9e",
+      categoryId: categoryIds[cId],
+      feeling: feelings[fId],
+      date: date[3] + "-" + date[1] + "-" + date[2],
+      title: faker.lorem.sentence(),
+      description: faker.lorem.paragraph()
+    }
+    const doc = await db.collection("entries").add(data);
+  }
+
+  res.send("success");
+
 });
 
 module.exports = router;
